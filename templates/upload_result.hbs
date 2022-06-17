@@ -1,0 +1,103 @@
+{{#> page title="imported bank transactions"}}
+
+    {{#*inline "page_styles_and_scripts" }}
+        <link rel=stylesheet href=/styles/bank_transactions.css>
+        <script type="module" src="/scripts/upload_result.js"></script>
+    {{/inline}}
+
+
+    {{#*inline "page_header" }}
+        <h1>Uploaded bank transactions</h1>
+    {{/inline}}
+
+
+    {{#*inline "transactions"}}
+        {{#each transactions}}
+            <div class="transaction">
+                <p class=index>{{add_one @index}}</p>
+                <p class="cost-center">{{cost_center}}</p>
+                <p class="relation">
+                    {{#if relation_iban}}
+                        <span class="has_title" title="{{relation_iban}}">
+                    {{/if}}
+                    {{relation_name}}
+                    {{#if relation_iban}}
+                        </span>
+                    {{/if}}
+                </p>
+                <p class="date">{{date}}</p>
+                <p class="amount">{{amount}}</p>
+                <p class="account">
+                    <span {{#if account_code}}class="reason {{assignment_reason}}" {{/if}}>{{account_code}}</span>
+                </p>
+                <p class="attributes">{{#each attributes}}
+                        <span class=prop-name>{{@key}}:</span><span class=prop-value>{{this}}</span>
+                    {{/each}}</p>
+            </div>
+        {{/each}}
+    {{/inline}}
+
+    {{#*inline "page_nav" }}
+        <ul>
+            {{#if imported}}
+                <li><a href=#imported>Niet toegewezen</a>
+            {{/if}}
+            {{#if assigned}}
+                <li>Toegewezen
+                    <ul>
+                        {{#each assigned}}
+                            <li><a href="#bm_{{@key}}">{{@key}}</a>
+                        {{/each}}
+                    </ul>
+            {{/if}}
+        </ul>
+    {{/inline}}
+
+
+
+    {{#*inline "total"}}
+        <span id="{{id}}">Debet: <span class="db">0</span> Credit: <span class="cr">0</span> Totaal:
+            <span class="tot">0</span></span>
+    {{/inline}}
+
+    {{#*inline "page_article" }}
+        {{#if failures}}
+            <div class="failures">
+                {{#each failures}}
+                    <p>{{this}}</p>
+                {{/each}}
+            </div>
+        {{/if}}
+
+        <h2>{{>total id="total_general"}}</h2>
+        {{#if imported}}
+            <a name=imported></a>
+            <h3>Niet toegewezen {{>total id="total_imported"}}</h3>
+            <div class="imported">
+                {{#each imported}}
+                    <div class="category-header">
+                        <p>{{@key}} {{>total id="@key"}}</p>
+
+                        {{>transactions transactions=this  }}
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+
+        {{#if assigned}}
+            <a name=assigned></a>
+            <h3>Toegewezen {{>total id="total_assigned"}}</h3>
+            <div class="assigned">
+                {{#each assigned}}
+                    <div class="category-header">
+                        <a name="bm_{{@key}}"></a>
+                        <p>{{@key}} {{>total id="@key"}}</p>
+
+                        {{>transactions transactions=this  }}
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+    {{/inline}}
+
+{{/page}}

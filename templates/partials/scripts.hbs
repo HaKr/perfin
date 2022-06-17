@@ -1,0 +1,37 @@
+{{#*inline "scripts_container"}}
+<li class="type folder {{#unless expanded}}collapsed{{/unless}}">
+    {{#if count}}{{> collapse_handle }}{{/if}} {{upper container_name}}{{#if count}} ({{count}}){{/if}}
+    <ul class="type {{container_name}}">
+        {{> script_nodes nodes }}
+    </ul>
+</li>
+{{/inline}}
+
+{{#*inline "scripts_nodes"}}
+{{#each nodes}}
+{{#each this}}
+{{> (named @key) node=this}}
+{{/each}}
+{{/each}}
+{{/inline}}
+
+{{#*inline "script_node_script"}}
+{{#with node}}
+<li class="script_node script">{{name}}
+    {{#if source}}
+    <code class="hidden"><!--{{{source}}}--></code>
+    {{/if}}
+</li>
+{{/with}}
+{{/inline}}
+
+{{#*inline "script_node_folder"}}
+{{#with node}}
+<li class="script_node folder collapsed">
+    {{> collapse_handle }} {{name}} ({{scripts_count}})
+    <ul>
+        {{> script_nodes nodes=scripts}}
+    </ul>
+</li>
+{{/with}}
+{{/inline}}

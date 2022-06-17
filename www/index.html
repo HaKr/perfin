@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Personal Finance</title>
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: minmax(min-content, 40%) minmax(min-content, 40%);
+            grid-template-rows: auto;
+            grid-template-areas:
+                "header header "
+                "nav nav "
+                "left right"
+                "footer footer";
+            width: 100%;
+            height: 100%
+        }
+
+        h1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        nav {
+            grid-area: nav;
+        }
+
+        nav>* {
+            display: inline-block;
+        }
+
+        .line {
+            height: 2rem;
+        }
+
+        .explain {
+            display: inline-block;
+            width: 15rem;
+        }
+
+        .txt {
+            grid-area: input;
+            display: inline-block;
+            width: auto;
+        }
+
+        .action {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 3rem;
+        }
+
+        #dropzone {
+            margin: 30px;
+            width: 500px;
+            height: 300px;
+            border: 1px dotted grey;
+        }
+
+        #greeter {
+            grid-area: left;
+            padding: 2em;
+        }
+
+        #farewell {
+            grid-area: right;
+            padding: 2em;
+        }
+
+        #tools {
+            grid-area: footer;
+            margin-top: 5em;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>PReS Expander</h1>
+    <nav>
+        <select id=ol-template>
+            <option value="">--Please choose a template--</option>
+            {{each template}}
+            <option value={{id}}>{{name}}</option>
+            {{/each}}
+        </select>
+    </nav>
+    <div id=greeter>
+        <fieldset>
+            <legend>Greet</legend>
+            <div class=line>
+                <label for=greetTo class=explain>To:</label><input id=greetTo value=World class=txt />
+            </div>
+            <button id=sendGreet class=action>Greet</button>
+        </fieldset>
+    </div>
+    <div id=farewell>
+        <fieldset>
+            <legend>Bid farewell</legend>
+            <div class=line>
+                <label class=explain>Colleague:</label><input class=txt id=lunian />
+            </div>
+            <div class=line>
+                <label class=explain>Years of service:</label><input class=txt id=serviceYears type=number min=1 max=50
+                    value=5 />
+            </div>
+
+            <button class=action id=sendFarewell>Farewell</button>
+        </fieldset>
+        <div id=tools>
+            <div>
+                <div id="dropzone">Drag & drop your file here...</div>
+            </div>
+            <button id=reload>Reload Handlebars templates</button>
+        </div>
+    </div>
+
+    <script type=application/javascript>
+        function sendFile(file) {
+            const uri = "/store/store_file";
+            const xhr = new XMLHttpRequest();
+            const fd = new FormData();
+
+            xhr.open("POST", uri, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText); // handle response.
+                }
+            };
+            fd.append('myFile', file);
+            // Initiate a multipart/form-data upload
+            xhr.send(fd);
+        }
+
+        const greetTo = document.getElementById("greetTo");
+        const sendGreet = document.getElementById("sendGreet");
+        const lunian = document.getElementById("lunian");
+        const serviceYears = document.getElementById("serviceYears");
+        const sendFarewell = document.getElementById("sendFarewell");
+        const reload = document.getElementById("reload");
+        const dropzone = document.getElementById("dropzone");
+    
+        dropzone.ondragover = dropzone.ondragenter = function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+
+        dropzone.ondrop = function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            const filesArray = event.dataTransfer.files;
+            for (let i=0; i<filesArray.length; i++) {
+                sendFile(filesArray[i]);
+            }
+        }
+    
+
+
+        sendGreet.addEventListener("click", () => {
+            const val = greetTo.value.trim();
+            const adressee = val.length > 0 ? val : "World!";
+            location.href = encodeURI(`/greet/${adressee}`);
+        })
+
+        sendFarewell.addEventListener("click", () => {
+            const val = lunian.value.trim();
+            const adressee = val.length > 0 ? val : "World!";
+            const duration = serviceYears.value;
+            location.href = encodeURI(`/byebye/?lunian=${adressee}&duration=${duration}`);
+        })
+
+        reload.addEventListener("click", () => {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('GET', '/admin/refresh_templates');
+
+
+            // 4. This will be called after the response is received
+            xhr.onload = function () {
+                if (xhr.status != 200) { // analyze HTTP status of the response
+                    console.error(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+                } else { // show the result
+                    if (xhr.response != 'Ok') alert(xhr.response);
+                    else console.log("Handlebars templates were reloaded.")
+                }
+            };
+
+            xhr.send();
+
+        })
+    </script>
+
+</body>
+
+</html>

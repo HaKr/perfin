@@ -1,0 +1,6 @@
+<select class="accounts">
+    <option value="" label="Select an account"></option>
+    {{#each accounts}}
+        <option value={{code}} label="{{description}}" {{selected_if code ../selected }}></option>
+    {{/each}}
+</select>

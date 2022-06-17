@@ -1,0 +1,54 @@
+use std::fs::File;
+
+use perfin::ing::{IngImporter, IngTransaction};
+use rust_decimal::Decimal;
+
+fn main() -> perfin::Result<()> {
+    let mut importer =
+        IngImporter::try_from_path("./data/organisations/cb09add43080499a90e7479543e750a9/2022/upload/Alle_rekeningen_01-01-2022_30-04-2022.csv")?;
+
+    let mut failures = vec![];
+    let mut successes = 0;
+    let mut debit = Decimal::ZERO;
+    let mut credit = Decimal::ZERO;
+
+    let mut imported: Vec<IngTransaction> = vec![];
+
+    for result in importer.transactions() {
+        match result {
+            Ok(transaction) => {
+                successes += 1;
+                if transaction.amount < Decimal::ZERO {
+                    credit -= transaction.amount;
+                } else {
+                    debit += transaction.amount;
+                }
+                if successes < 6 {
+                    println!("{:?}", transaction);
+                }
+
+                imported.push(transaction);
+            }
+            Err(e) => failures.push(e),
+        }
+    }
+
+    let bank_file = File::create(
+        "./data/organisations/cb09add43080499a90e7479543e750a9/2022/bank_transactions.yaml",
+    )?;
+    serde_yaml::to_writer(bank_file, &imported)?;
+
+    println!(
+        "Imported {}; skipped: {}; DB={db}, CR={cr} -> Balance={balance}",
+        successes,
+        failures.len(),
+        db = debit,
+        cr = credit,
+        balance = debit - credit
+    );
+    for fail in failures {
+        println!("\t{:?}", fail);
+    }
+
+    Ok(())
+}

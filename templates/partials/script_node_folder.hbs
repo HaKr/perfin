@@ -1,0 +1,8 @@
+{{#with node}}
+<li class="script_node folder collapsed">
+    {{> collapse_handle }} {{name}} ({{scripts_count}})
+    <ul>
+        {{> script_nodes nodes=scripts}}
+    </ul>
+</li>
+{{/with}}

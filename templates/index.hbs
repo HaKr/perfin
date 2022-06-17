@@ -1,0 +1,18 @@
+{{#> page title="Welcome"}}
+    {{#*inline "page_styles_and_scripts" }}
+        <link rel=stylesheet href=/styles/tree-structure.css>
+    {{/inline}}
+
+    {{#*inline "page_header" }}
+        <h1>Cindy & Harry</h1>
+    {{/inline}}
+
+    {{#*inline "page_article" }}
+        <label for="account">Account:</label>
+        <input list="accounts" id="account" placeholder="Choose an account" />
+    {{/inline}}
+
+    {{#*inline "page_nav" }}
+        {{> resources }}
+    {{/inline}}
+{{/page}}

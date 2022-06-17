@@ -1,0 +1,139 @@
+.failures {
+    border: 3px solid red;
+    margin-bottom: 1cm;
+}
+
+h2,
+h3 {
+    text-align: center;
+
+}
+
+h3 {
+    margin-top: 1cm;
+}
+
+.imported {
+    border: 3px solid burlywood;
+}
+
+.assigned {
+    border: 3px solid green;
+}
+
+.imported p,
+.assigned p {
+    display: inline-block;
+    margin: 0;
+}
+
+p.index {
+    width: 4%;
+    text-align: center;
+    color: brown;
+    background-color: oldlace;
+    font-size: x-small;
+}
+
+p.cost-center {
+    width: 12%;
+}
+
+p.relation {
+    width: 30%;
+}
+
+p.date {
+    width: 12%;
+}
+
+p.amount {
+    width: 10%;
+}
+
+
+p.account {
+    width: 25%;
+}
+
+p.attributes {
+    width: 100%;
+    margin-top: 3mm;
+}
+
+.category-header>p:first-of-type {
+    width: 100%;
+    margin-top: 2mm;
+    border-top: dotted thin mediumorchid;
+    height: 7mm;
+    background-color: honeydew;
+    color: blueviolet;
+    text-align: center;
+    padding-top: 2mm;
+}
+
+.transaction {
+    border: solid thin blue;
+    padding: 3mm;
+    color: darkblue;
+}
+
+.prop-name {
+    color: bisque;
+    font-size: x-small;
+}
+
+.prop-value {
+    color: cornflowerblue;
+    font-size: small;
+    margin-left: 1mm;
+    margin-right: 2mm;
+}
+
+.has_title::after {
+    content: " *";
+    color: steelblue;
+    font-size: xx-small;
+}
+
+.reason.reference {
+    color: green;
+}
+
+.reason::after {
+    font-size: xx-small;
+    vertical-align: super;
+}
+
+.reason.reference::after {
+    content: "t";
+}
+
+.reason.relation_name {
+    color: blue;
+}
+
+.reason.relation_name::after {
+    content: "n";
+}
+
+.reason.contract {
+    color: darkorchid;
+}
+
+.reason.contract::after {
+    content: "c";
+}
+
+.reason.description {
+    color: tan;
+}
+
+.reason.description::after {
+    content: "o";
+}
+
+.amount,
+.date {
+    text-align: right;
+}

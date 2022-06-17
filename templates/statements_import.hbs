@@ -1,0 +1,25 @@
+{{#> page title="import bank transactions"}}
+
+    {{#*inline "page_styles_and_scripts" }}
+        <script type="module" src="/scripts/filedrop.js"></script>
+    {{/inline}}
+
+    {{#*inline "page_header" }}
+        <h1>Upload bank transactions</h1>
+    {{/inline}}
+
+    {{#*inline "page_article" }}
+        <form id="transfer" method="POST" action="/upload/bank_transactions" enctype="multipart/form-data">
+            <select id=format name="format">
+                <option value="" disabled>--Please choose a bank format--</option>
+                {{#each formats}}
+                    {{#each this}}
+                        <option value={{name}}>{{description}}</option>
+                    {{/each}}
+                {{/each}}
+            </select>
+            <div id="dropzone" data-drop-state="neutral">Drag & drop your file here...</div>
+        </form>
+    {{/inline}}
+
+{{/page}}

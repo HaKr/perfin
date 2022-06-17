@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Personal Finance - {{title}}</title>
+    <link rel=stylesheet href=/styles/perfin.css>
+    {{> page_styles_and_scripts }}
+</head>
+
+<body>
+    <header>
+        {{> page_header }}
+        <nav class="top">
+            <a href="/">Index</a>
+            <a href="/transactions/import">Import Bank</a>
+        </nav>
+
+    </header>
+
+    <nav class="left treeview">
+        {{> page_nav}}
+    </nav>
+
+    <article>
+        {{> page_article}}
+    </article>
+
+    <aside>
+        {{> page_aside }}
+    </aside>
+
+    <footer>
+        <p>(c) 2022 Einstein Inc.</p>
+    </footer>
+
+    {{#if accounts }}
+        {{> accounts_list }}
+    {{/if}}
+
+</body>
+
+</html>

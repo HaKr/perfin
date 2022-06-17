@@ -1,0 +1,80 @@
+{{#if current}}
+    {{#*inline "collapse_handle"}}
+        <span class="collapse-handle">&nbsp;</span>
+    {{/inline}}
+
+    {{#*inline "resource_container"}}
+        <li class="type folder {{#unless expanded}}collapsed{{/unless}}">
+            {{> collapse_handle }} {{upper container_name}}
+            <ul class="type {{container_name}}">
+                {{#each nodes}}
+                    <li class="{{../rs_class}}" data-resource-type={{../container_name}} data-id={{id}}>{{name}}</li>
+                {{/each}}
+            </ul>
+
+        </li>
+    {{/inline}}
+
+    {{#with current}}
+        <h2>Resources</h2>
+        <ul class="resources">
+            {{> resource_container container_name="masters" nodes=manifest.masters.master rs_class="html"}}
+            {{> resource_container container_name="sections" nodes=manifest.sections.section expanded=true rs_class="html"}}
+            {{> resource_container container_name="snippets" nodes=manifest.snippets.snippet rs_class="hbs"}}
+            {{> resource_container container_name="stylesheets" nodes=manifest.stylesheets.stylesheet rs_class="css"}}
+            {{> resource_container container_name="images" nodes=manifest.images.image rs_class="image"}}
+        </ul>
+
+        {{#if scripts}}
+            {{#with scripts}}
+                {{#*inline "scripts_nodes"}}
+                    {{#*inline "script_node_script"}}
+                        {{#with node}}
+                            <li class="script_node script">{{name}}
+                                {{#if source}}
+                                    <code class="hidden"><!--{{{source}}}--></code>
+                                {{/if}}
+                            </li>
+                        {{/with}}
+                    {{/inline}}
+
+                    {{#*inline "script_node_folder"}}
+                        {{#with node}}
+                            <li class="script_node folder collapsed">
+                                {{> collapse_handle }} {{name}} ({{scripts_count}})
+                                <ul>
+                                    {{> scripts_nodes nodes=scripts}}
+                                </ul>
+                            </li>
+                        {{/with}}
+                    {{/inline}}
+
+                    {{#each nodes}}
+                        {{#each this}}
+                            {{> (named @key) node=this}}
+                        {{/each}}
+                    {{/each}}
+                {{/inline}}
+
+                {{#*inline "scripts_container"}}
+                    <li class="type folder {{#unless expanded}}collapsed{{/unless}}">
+                        {{#if count}}{{> collapse_handle }}{{/if}} {{upper container_name}}{{#if count}}
+                            ({{count}}){{/if}}
+                        <ul class="type {{container_name}}">
+                            {{> scripts_nodes nodes }}
+                        </ul>
+                    </li>
+                {{/inline}}
+
+                <h2>User scripts</h2>
+                <ul class="scripts">
+                    {{> scripts_container container_name="control" nodes=control count=control_scripts_count }}
+                    {{> scripts_container container_name="standard" nodes=standard count=standard_scripts_count expanded=true}}
+                    {{> scripts_container container_name="post_pagination" nodes=post_pagination
+    count=post_pagination_scripts_count}}
+                </ul>
+            {{/with}}
+        {{/if}}
+
+    {{/with}}
+{{/if}}
