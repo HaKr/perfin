@@ -40,7 +40,7 @@ pub struct Ledger {
     assign_by_contract: HashMap<String, AssignByContractDefinition>,
 
     #[serde(skip)]
-    accounts_by_name: Vec<AssignByNameSearch>,
+    assign_by_name: Vec<AssignByNameSearch>,
     #[serde(skip)]
     pub assign_by_description: HashMap<String, Vec<AssignByDescription>>,
 
@@ -78,7 +78,7 @@ impl Ledger {
             relation.reference = relation_reference.clone();
         }
 
-        result.accounts_by_name = vec![];
+        result.assign_by_name = vec![];
 
         for (account_code, search_terms) in result.assign_by_name_definition.iter() {
             let account = result.find_account_by_reference(account_code.as_str());
@@ -94,7 +94,7 @@ impl Ledger {
                     )
                     .as_str(),
                 )?;
-                result.accounts_by_name.push(AssignByNameSearch {
+                result.assign_by_name.push(AssignByNameSearch {
                     account_code: account_code.clone(),
                     name: search_term.clone(),
                     search_expression,
@@ -123,7 +123,7 @@ impl Ledger {
             result.assign_by_description.insert(key.to_string(), list);
         }
 
-        result.load_journal()?;
+        // result.load_journal()?;
 
         Ok(result)
     }
@@ -183,6 +183,29 @@ fn default_currency() -> &'static Currency {
     iso::USD
 }
 
+impl Default for Ledger {
+    fn default() -> Self {
+        Self { 
+            id: Default::default(), 
+            name: Default::default(), 
+            year: Default::default(), 
+            currency_iso: Default::default(), 
+            currency: default_currency(), 
+            bank_formats: Default::default(), 
+            cost_centers: Default::default(), 
+            bank_accounts: Default::default(), 
+            relations: Default::default(), 
+            accounts: Default::default(), 
+            assign_by_name_definition: Default::default(), 
+            assign_by_description_definition: Default::default(), 
+            assign_by_contract: Default::default(), 
+            assign_by_name: Default::default(), 
+            assign_by_description: Default::default(), 
+            journal: Default::default() }
+
+    }
+}
+
 impl JournalRepository for Ledger {
     fn load_journal(&mut self) -> std::result::Result<(), crate::JournalRepositoryError> {
         let journal_file = File::open(self.file_name("journal.yaml"))?;
@@ -231,7 +254,7 @@ impl AccountsRepository for Ledger {
     }
 
     fn search_account_by_name(&self, name: &str) -> Option<(&AssignByNameSearch, String)> {
-        self.accounts_by_name
+        self.assign_by_name
             .iter()
             .find_map(|account_by_name_search| {
                 if let Some(capture) = account_by_name_search.search_expression.captures(name) {

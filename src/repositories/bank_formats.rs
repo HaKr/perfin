@@ -11,8 +11,8 @@ pub struct BankFormats {
 
 impl BankFormats {
     pub fn from_fixture() -> Result<Self, std::io::Error> {
-        let file = File::open("./data/storage/bank_formats.json")?;
-        match serde_json::from_reader(file) {
+        let file = File::open("./data/bank_formats.yaml")?;
+        match serde_yaml::from_reader(file) {
             Ok(this) => Ok(this),
             Err(_) => Ok(Self::default()),
         }

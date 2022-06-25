@@ -1,7 +1,11 @@
-use perfin::BankFormats;
+use std::fs::File;
 
-fn main() -> Result<(), std::io::Error> {
-    let _formats = BankFormats::from_fixture()?;
-    // formats.save()
+use perfin::{ing::{ParseError, DescriptionParser}};
+
+fn main() -> Result<(), ParseError> {
+    let format_config = File::open("data/formats/ing.yaml").unwrap();
+
+    let parser = DescriptionParser::try_from(format_config)?;
+
     Ok(())
 }
