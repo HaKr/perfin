@@ -185,24 +185,24 @@ fn default_currency() -> &'static Currency {
 
 impl Default for Ledger {
     fn default() -> Self {
-        Self { 
-            id: Default::default(), 
-            name: Default::default(), 
-            year: Default::default(), 
-            currency_iso: Default::default(), 
-            currency: default_currency(), 
-            bank_formats: Default::default(), 
-            cost_centers: Default::default(), 
-            bank_accounts: Default::default(), 
-            relations: Default::default(), 
-            accounts: Default::default(), 
-            assign_by_name_definition: Default::default(), 
-            assign_by_description_definition: Default::default(), 
-            assign_by_contract: Default::default(), 
-            assign_by_name: Default::default(), 
-            assign_by_description: Default::default(), 
-            journal: Default::default() }
-
+        Self {
+            id: Default::default(),
+            name: Default::default(),
+            year: Default::default(),
+            currency_iso: Default::default(),
+            currency: default_currency(),
+            bank_formats: Default::default(),
+            cost_centers: Default::default(),
+            bank_accounts: Default::default(),
+            relations: Default::default(),
+            accounts: Default::default(),
+            assign_by_name_definition: Default::default(),
+            assign_by_description_definition: Default::default(),
+            assign_by_contract: Default::default(),
+            assign_by_name: Default::default(),
+            assign_by_description: Default::default(),
+            journal: Default::default(),
+        }
     }
 }
 

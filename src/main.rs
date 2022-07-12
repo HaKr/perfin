@@ -24,10 +24,7 @@ use tracing::{error, info};
 async fn main() {
     // Set the RUST_LOG, if it hasn't been explicitly defined
     if std::env::var_os("RUST_LOG").is_none() {
-        std::env::set_var(
-            "RUST_LOG",
-            "example_static_file_server=debug,tower_http=info,perfin=debug",
-        )
+        std::env::set_var("RUST_LOG", "tower_http=info,perfin=debug")
     }
     tracing_subscriber::fmt::init();
 
@@ -52,7 +49,7 @@ async fn main() {
                 )
             };
 
-            let app = Router::new()
+            let app_server = Router::new()
                 .nest(
                     "/scripts",
                     get_service(ServeDir::new("www/scripts")).handle_error(error_responder),
@@ -86,7 +83,7 @@ async fn main() {
 
             info!("listening on {}", addr);
             axum::Server::bind(&addr)
-                .serve(app.into_make_service())
+                .serve(app_server.into_make_service())
                 .await
                 .unwrap();
         }
